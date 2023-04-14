@@ -10,16 +10,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class RegisterActivity extends base {
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.embedded.sad.base.baseActivity;
+
+public class RegisterActivity extends baseActivity {
 
     EditText Email, Password, Name ;
     Button Register;
     String NameHolder, EmailHolder, PasswordHolder, TempNum, TempPassword;
     Boolean EditTextEmptyHolder;
-    Cursor cursor;
-    String F_Result = "Not_Found";
 
-    SharedPreferences prefs = RegisterActivity.this.getSharedPreferences("com.namespace.pkg", Context.MODE_PRIVATE);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +61,9 @@ public class RegisterActivity extends base {
 
         EditTextEmptyHolder = !TextUtils.isEmpty(NameHolder) && !TextUtils.isEmpty(EmailHolder) && !TextUtils.isEmpty(PasswordHolder);
 
-        TempNum = getPrefs("number");
-        TempPassword = getPrefs("password");
+        SharedPreferences prefs = getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+        TempNum = prefs.getString("number","");
+        TempPassword = prefs.getString("password","");
 
         if (NameHolder != null && EmailHolder != null && PasswordHolder != null){
 
@@ -69,9 +72,15 @@ public class RegisterActivity extends base {
                 if(TempNum == EmailHolder){
                     Toast.makeText(this, "Account already Exists", Toast.LENGTH_SHORT).show();
                 }else{
-                    setPrefs("number",EmailHolder);
-                    setPrefs("password", PasswordHolder);
-                    setPrefs("name", NameHolder);
+
+                    SharedPreferences.Editor edit = prefs.edit();
+                    edit.putString("number",EmailHolder);
+                    edit.putString("password", PasswordHolder);
+                    edit.putString("name", NameHolder);
+                    edit.apply();
+
+                    goto_login();
+                    finish();
                 }
 
             }else{
@@ -82,14 +91,6 @@ public class RegisterActivity extends base {
             Toast.makeText(this, "Please fill all details", Toast.LENGTH_SHORT).show();
             EmptyEditTextAfterDataInsert();
         }
-    }
-
-    public String getPrefs(String name) {
-        return prefs.getString(name, "");
-    }
-
-    public void setPrefs(String key, String value) {
-        prefs.edit().putString(key, value).commit();
     }
 
 }

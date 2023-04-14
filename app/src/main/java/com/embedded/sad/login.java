@@ -1,29 +1,27 @@
 package com.embedded.sad;
 
+
+import static android.app.PendingIntent.getActivity;
+
+import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.embedded.sad.base.baseActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.embedded.sad.R;
-import com.embedded.sad.RegisterActivity;
-
-public class login extends AppCompatActivity {
+public class login extends baseActivity {
 
     Button LogInButton, RegisterButton ;
     EditText Email, Password ;
     String EmailHolder, PasswordHolder;
     Boolean EditTextEmptyHolder;
-    Cursor cursor;
-    String TempPassword = "NOT_FOUND" ;
-    String TempNum = "NOT_FOUND" ;
-    public static final String UserEmail = "";
+    String TempPassword = "" ;
+    String TempNum = "" ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +32,8 @@ public class login extends AppCompatActivity {
         RegisterButton = (Button)findViewById(R.id.buttonRegister);
         Email = (EditText)findViewById(R.id.editEmail);
         Password = (EditText)findViewById(R.id.editPassword);
+
+
 
         //Adding click listener to log in button.
         LogInButton.setOnClickListener(new View.OnClickListener() {
@@ -64,21 +64,12 @@ public class login extends AppCompatActivity {
 
         if(EditTextEmptyHolder) {
 
-            while (cursor.moveToNext()) {
-
-                if (cursor.isFirst()) {
-
-                    cursor.moveToFirst();
-
-                    TempNum = "9999999999";
-                    TempPassword = "0000";
-
-                    // Closing cursor.
-                    cursor.close();
+                    SharedPreferences prefs = getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+                    TempNum = prefs.getString("number","");
+                    TempPassword = prefs.getString("password","");
+                    CheckFinalResult();
                 }
-            }
-            CheckFinalResult();
-        }
+
         else {
             Toast.makeText(login.this,"Please Enter UserName or Password.",Toast.LENGTH_LONG).show();
         }
@@ -99,9 +90,8 @@ public class login extends AppCompatActivity {
         if(TempPassword.equalsIgnoreCase(PasswordHolder) && TempNum.equals(EmailHolder))
         {
             Toast.makeText(login.this,"Login Successful",Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(login.this, MainActivity.class);
-            intent.putExtra(UserEmail, EmailHolder);
-            startActivity(intent);
+            goto_home();
+            finish();
         }
         else {
             Toast.makeText(login.this,"UserName or Password is Wrong, Please Try Again.",Toast.LENGTH_LONG).show();

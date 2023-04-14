@@ -1,79 +1,140 @@
 package com.embedded.sad;
-
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Menu;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
-
+import com.embedded.sad.adapters.RecyclerViewCustomAdapter;
+import com.embedded.sad.base.baseActivity;
 import androidx.appcompat.app.AlertDialog;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.embedded.sad.databinding.ActivityMainBinding;
 
-public class MainActivity extends base {
+public class MainActivity extends baseActivity {
 
-    private AppBarConfiguration mAppBarConfiguration;
-    private ActivityMainBinding binding;
+    private RecyclerView recyclerView_vehicle;
+    private RecyclerView recyclerView_orders;
+    private RecyclerView.LayoutManager layoutManagerRecyclerView;
+    private RecyclerViewCustomAdapter recyclerViewCustomAdapter;
+    private RelativeLayout card_wallet;
+    private RelativeLayout card_vehicles;
+    private RelativeLayout card_orders;
+
+    private TextView wallet_text,vehicles_text, orders_text, wallet_balance_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.content_main);
+        
+        card_wallet = findViewById(R.id.card1);
+        card_vehicles = findViewById(R.id.card2);
+        card_orders =findViewById(R.id.card3);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        wallet_text = findViewById(R.id.text_wallet);
+        vehicles_text = findViewById(R.id.text_vehicle);
+        orders_text = findViewById(R.id.text_order);
+        wallet_balance_text = findViewById(R.id.wallet_balance);
 
-        setSupportActionBar(binding.appBarMain.toolbar);
-        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
+
+
+
+        recyclerView_vehicle = findViewById(R.id.recyclerview_vehicles);
+        recyclerView_orders = findViewById(R.id.recyclerview_orders);
+
+        populate_vehicle_data();
+        populate_orders_data();
+
+        card_wallet.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                goto_wallet();
             }
         });
-        DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_wallet, R.id.nav_orders, R.id.nav_vehicles)
-                .setOpenableLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        wallet_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goto_wallet();
+            }
+        });
+        wallet_balance_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goto_wallet();
+            }
+        });
+        vehicles_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goto_vehicles();
+            }
+        });
+        orders_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goto_orders();
+            }
+        });
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+    private void populate_vehicle_data(){
+        String data = readData("vehicles.txt");
+
+
+        if (data.length() == 0 || data.equalsIgnoreCase(" ")){
+            Toast.makeText(this, "Please Register Your Vehicle", Toast.LENGTH_SHORT).show();
+            String[] vehicle_data_array = {"Please Register Your Vehicle"};
+            layoutManagerRecyclerView = new LinearLayoutManager(MainActivity.this);
+            recyclerView_vehicle.setLayoutManager(layoutManagerRecyclerView);
+            recyclerViewCustomAdapter = new RecyclerViewCustomAdapter(vehicle_data_array);
+            recyclerView_vehicle.setAdapter(recyclerViewCustomAdapter);
+        }
+        else{
+            String[] vehicle_data_array = data.split(";");
+            layoutManagerRecyclerView = new LinearLayoutManager(MainActivity.this);
+            recyclerView_vehicle.setLayoutManager(layoutManagerRecyclerView);
+            recyclerViewCustomAdapter = new RecyclerViewCustomAdapter(vehicle_data_array);
+            recyclerView_vehicle.setAdapter(recyclerViewCustomAdapter);
+        }
+
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+    private void populate_orders_data(){
+        String data = readData("orders.txt");
+
+        if(data.length() == 0 || data.equalsIgnoreCase(" ")){
+            Toast.makeText(this, "No Previous Orders Found", Toast.LENGTH_SHORT).show();
+            String[] orders_data_array = {"No Previous Orders Found"};
+            layoutManagerRecyclerView = new LinearLayoutManager(MainActivity.this);
+            recyclerView_orders.setLayoutManager(layoutManagerRecyclerView);
+            recyclerViewCustomAdapter = new RecyclerViewCustomAdapter(orders_data_array);
+            recyclerView_orders.setAdapter(recyclerViewCustomAdapter);
+        }
+        else{
+            String[] orders_data_array = data.split(",");
+            layoutManagerRecyclerView = new LinearLayoutManager(MainActivity.this);
+            recyclerView_orders.setLayoutManager(layoutManagerRecyclerView);
+            recyclerViewCustomAdapter = new RecyclerViewCustomAdapter(orders_data_array);
+            recyclerView_orders.setAdapter(recyclerViewCustomAdapter);
+        }
+
     }
+
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        AlertDialog alertDialog = new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this)
+                .setIcon(R.drawable.ic_launcher_background)
                 .setTitle("Exit")
                 .setMessage("Are you sure to Exit")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //set what would happen when positive button is clicked
@@ -87,10 +148,8 @@ public class MainActivity extends base {
                         //set what should happen when negative button is clicked
                         Toast.makeText(getApplicationContext(),"Thanks for staying!!",Toast.LENGTH_LONG).show();
                     }
-                })
-                .show();
+                });
+
+        alertDialog.show();
     }
-
-
-
 }

@@ -8,61 +8,78 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
-
-    <TextView
-        android:id="@+id/textView"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="90dp"
-        android:gravity="center"
-        android:textAlignment="center"
-        android:text="Sign In"
-        android:textColor="#000"
-        android:textSize="20dp" />
+        android:padding="30dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/card_boarder">
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:hint="Enter Phone Number"
-        android:textColor="#000"
-        android:ems="10"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:id="@+id/editEmail"
-        android:gravity="center"/>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:text="Sign In"
+            android:textColor="@color/emerald_blue"
+            android:textStyle="bold"
+            android:textSize="30dp" />
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:hint="Enter Password"
-        android:textColor="#000"
-        android:ems="10"
-        android:layout_below="@+id/editEmail"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:id="@+id/editPassword"
-        android:gravity="center"/>
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="Enter Phone Number"
+            android:textStyle="italic"
+            android:textColorHint="@color/emerald_blue"
+            android:textColor="@color/emerald_blue"
+            android:ems="10"
+            android:layout_below="@+id/textView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:id="@+id/editEmail"
+            android:gravity="center"/>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/buttonLogin"
-        android:layout_below="@+id/editPassword"
-        android:layout_marginTop="20dp"
-        android:text="Sign In " />
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:hint="Enter Password"
+            android:textStyle="italic"
+            android:textColor="@color/emerald_blue"
+            android:ems="10"
+            android:textColorHint="@color/emerald_blue"
+            android:layout_below="@+id/editEmail"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:id="@+id/editPassword"
+            android:gravity="center"/>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/buttonRegister"
-        android:layout_below="@+id/buttonLogin"
-        android:layout_marginTop="20dp"
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonLogin"
+            android:layout_below="@+id/editPassword"
+            android:textColor="@color/white"
+            android:background="@drawable/filter_spinner_dropdown_bg"
+            android:layout_marginTop="20dp"
+            android:text="Sign In " />
 
-        android:text="Sign Up" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonRegister"
+            android:background="@drawable/filter_spinner_dropdown_bg"
+            android:textColor="@color/white"
+            android:layout_below="@+id/buttonLogin"
+            android:layout_marginTop="20dp"
 
+            android:text="Sign Up" />
+
+
+
+    </RelativeLayout>
 
 </RelativeLayout>
