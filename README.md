@@ -1,9 +1,9 @@
 # Smart-phone based Automatic Dispenser
 ## Problem Statement
-This project looks into the problem of going to the billing desk after refuelling. many a times the billing desk is qiet far and the weather is not conducive. Hence, this project tries to increase the conveniance of the customer by automating the payment process.
+This project looks into the problem of going to the billing desk after refuelling. Many a times the billing desk is qiet far and the weather is not conducive. Hence, this project tries to increase the conveniance of the customer by automating the payment process.
 
 ## Proposed Solution-
-we propose a RFID based sutomated re-fuelling solution, which identifies the car and user account uniquely using RFID tag and bills the associated user account.
+We propose a RFID based automated re-fuelling solution, which identifies the vehicle and user account uniquely using RFID tag and bills the associated user account.
 
 ## Steps to the proposed solution-
 1. Identifying the vehicle using RFID
