@@ -11,7 +11,7 @@ using namespace std;
 
 //#define PORT_R 13   // Port to receive RFID number
 //#define PORT_S 14   // Port to send fuel discharge and receive fuel amount & cost
-//#define PORT_S 15   // Port to send fuel discharge and receive fuel amount & cost to Server
+//#define PORT_JA 15   // Port to send fuel discharge and receive fuel amount & cost to Server
 //#define MAX_BUF 4096
 
  
