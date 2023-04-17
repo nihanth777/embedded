@@ -1,8 +1,10 @@
 package com.embedded.sad;
 import android.annotation.SuppressLint;
+import android.content.AsyncQueryHandler;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
@@ -22,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -50,7 +53,7 @@ public class MainActivity extends baseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
-        
+
         card_wallet = findViewById(R.id.card1);
         card_vehicles = findViewById(R.id.card2);
         card_orders =findViewById(R.id.card3);
@@ -106,31 +109,38 @@ public class MainActivity extends baseActivity {
         StrictMode.setThreadPolicy(policy);
 
         myThread_send = new MyThread_send();
-        new Thread(myThread_send).start();
+       // new Thread(myThread_send).start();
 
-        Thread myThread_receive = new Thread(new MyThread_receive());
-        myThread_receive.start();
+        Thread myThread_rec = new Thread(new MyThread_receive());
+        myThread_rec.start();
 
     }
 
     private class MyThread_send implements Runnable{
 
         private volatile String msg = "";
-        Socket socket;
+        Socket sock;
+        PrintWriter pw;
         DataOutputStream dos;
         @Override
         public void run() {
             try {
-
-                socket = new Socket(tcp_send_ip, port_send);
-                dos = new DataOutputStream(socket.getOutputStream());
-                dos.writeUTF(msg);
-                dos.close();
-                dos.flush();
-                socket.close();
+                Toast.makeText(MainActivity.this, "wallet balance sent in", Toast.LENGTH_SHORT).show();
+                sock = new Socket("192.168.29.84", 8009);
+//                dos = new DataOutputStream(socket.getOutputStream());
+//                dos.writeUTF(msg);
+//                dos.close();
+//                dos.flush();
+                pw = new PrintWriter(sock.getOutputStream());
+                pw.write(msg);
+                pw.flush();
+                pw.close();
+                sock.close();
+                Toast.makeText(MainActivity.this, "wallet balance sent out", Toast.LENGTH_SHORT).show();
 
             }catch (IOException e){
                 e.printStackTrace();
+                Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -162,50 +172,61 @@ public class MainActivity extends baseActivity {
                     h.post(new Runnable() {
                         @Override
                         public void run() {
+                            try {
+                                if(Message == null){
+                                    Toast.makeText(MainActivity.this, "null message received", Toast.LENGTH_SHORT).show();
+                                }
+                                else if(Message.equalsIgnoreCase("get balance")){
+                                    Toast.makeText(MainActivity.this, "get balance received", Toast.LENGTH_SHORT).show();
+                                    SharedPreferences sharedPreferences = MainActivity.this.getSharedPreferences("DATA",Context.MODE_PRIVATE);
+                                    String msg = sharedPreferences.getString("wallet_balance",null);
+                                    myThread_send.sendMsg(msg);
 
-                            if(Message.equalsIgnoreCase("get balance")){
-                                SharedPreferences sharedPreferences = MainActivity.this.getSharedPreferences("DATA",Context.MODE_PRIVATE);
-                                String msg = sharedPreferences.getString("wallet_balance",null);
-                                myThread_send.sendMsg(msg);
-                            } else {
-                                String[] order_msg = Message.split(",");
+                                } else {
+                                    Toast.makeText(MainActivity.this, Message, Toast.LENGTH_SHORT).show();
+                                    String[] order_msg = Message.split(",");
 
-                                prev_order_data = readData("orders.txt");
-                                String final_order_details = prev_order_data+order_msg[0]+"    "+order_msg[1]+"    £"+order_msg[2]+";";
-                                String resp = writeData("orders.txt", final_order_details);
+                                    prev_order_data = readData("orders.txt");
+                                    String final_order_details = prev_order_data+order_msg[0]+"    "+order_msg[1]+"    £"+order_msg[2]+";";
+                                    String resp = writeData("orders.txt", final_order_details);
 
 
-                                Calendar calendar = Calendar.getInstance();
-                                @SuppressLint("SimpleDateFormat") SimpleDateFormat mdFormat = new SimpleDateFormat("HH:mm:ss");
-                                String strTime = mdFormat.format(calendar.getTime());
+                                    Calendar calendar = Calendar.getInstance();
+                                    @SuppressLint("SimpleDateFormat") SimpleDateFormat mdFormat = new SimpleDateFormat("HH:mm:ss");
+                                    String strTime = mdFormat.format(calendar.getTime());
 
-                                prev_history_data = readData("history.txt");
-                                String final_history_details = prev_history_data+order_msg[0]+"    "+strTime+"    £"+order_msg[2]+";";
-                                String resp1 = writeData("history.txt", final_history_details);
-                                
-                                if(resp.equalsIgnoreCase("success") && resp1.equalsIgnoreCase("success")){
+                                    prev_history_data = readData("history.txt");
+                                    String final_history_details = prev_history_data+order_msg[0]+"    "+strTime+"    £"+order_msg[2]+";";
+                                    String resp1 = writeData("history.txt", final_history_details);
 
-                                    Toast.makeText(MainActivity.this, "Orders and Transaction history are updated succesfully", Toast.LENGTH_SHORT).show();
-                                    
-                                    SharedPreferences sharedPreferences = getSharedPreferences("DATA",Context.MODE_PRIVATE);
-                                    String balance = sharedPreferences.getString("wallet_balance",null);
-                                    String final_balance = String.valueOf(Double.parseDouble(balance) - Double.parseDouble(order_msg[2]));
-                                    sharedPreferences.edit().putString("wallet_balance",final_balance).apply();
+                                    if(resp.equalsIgnoreCase("success") && resp1.equalsIgnoreCase("success")){
 
-                                    finish();
-                                    startActivity(getIntent());
-                                } else if (resp.equalsIgnoreCase("success") && !("success").equalsIgnoreCase(resp1)) {
+                                        Toast.makeText(MainActivity.this, "Orders and Transaction history are updated succesfully", Toast.LENGTH_SHORT).show();
 
-                                    Toast.makeText(MainActivity.this, "ERROR : Transaction history", Toast.LENGTH_SHORT).show();
-                                    
-                                }else if (resp1.equalsIgnoreCase("success") && !("success").equalsIgnoreCase(resp)) {
+                                        SharedPreferences sharedPreferences = getSharedPreferences("DATA",Context.MODE_PRIVATE);
+                                        String balance = sharedPreferences.getString("wallet_balance",null);
+                                        String final_balance = String.valueOf(Double.parseDouble(balance) - Double.parseDouble(order_msg[2]));
+                                        sharedPreferences.edit().putString("wallet_balance",final_balance).apply();
 
-                                    Toast.makeText(MainActivity.this, "ERROR : Orders", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                        startActivity(getIntent());
+                                    } else if (resp.equalsIgnoreCase("success") && !("success").equalsIgnoreCase(resp1)) {
+
+                                        Toast.makeText(MainActivity.this, "ERROR : Transaction history", Toast.LENGTH_SHORT).show();
+
+                                    }else if (resp1.equalsIgnoreCase("success") && !("success").equalsIgnoreCase(resp)) {
+
+                                        Toast.makeText(MainActivity.this, "ERROR : Orders", Toast.LENGTH_SHORT).show();
+
+
+                                    }
 
                                 }
-
+                            }catch (Exception e){
+                                e.printStackTrace();
                             }
-                            Toast.makeText(MainActivity.this, Message, Toast.LENGTH_SHORT).show();
+
+                            //Toast.makeText(MainActivity.this, Message, Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -265,7 +286,7 @@ public class MainActivity extends baseActivity {
     @Override
     public void onBackPressed() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this)
-                .setIcon(R.drawable.sad_logo)
+                .setIcon(R.drawable.LOGO_1)
                 .setTitle("Exit")
                 .setMessage("Are you sure to Exit")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {

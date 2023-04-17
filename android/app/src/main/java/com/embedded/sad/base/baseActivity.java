@@ -19,11 +19,11 @@ import java.io.IOException;
 
 public class baseActivity extends AppCompatActivity {
 
-    public int port_receive ;
+    public int port_receive = 8007 ;
 
-    public int port_send ;
+    public int port_send  = 8009;
 
-    public String tcp_send_ip = "";
+    public String tcp_send_ip = "192.168.29.84";
 
     public String readData(String file)
     {
