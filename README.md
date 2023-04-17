@@ -16,3 +16,8 @@
 * This application is written using .NET version 4.7.
 * This self contained project can be edited using Visual Studio.
 * The exe file is stored in Dispencer/Dispenser_app/bin/release
+
+# Rpi1-Network
+* This folder has c++ code for raspberry pi to act as server
+* Multi thread coding for handling different devices communication to and fro.
+* All the instruction related to working can be found in readme inside the folder.
