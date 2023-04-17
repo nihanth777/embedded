@@ -33,7 +33,8 @@ public class login extends baseActivity {
         Email = (EditText)findViewById(R.id.editEmail);
         Password = (EditText)findViewById(R.id.editPassword);
 
-
+        SharedPreferences sharedPreferences = this.getSharedPreferences("DATA",Context.MODE_PRIVATE);
+        sharedPreferences.edit().putString("wallet_balance","650").apply();
 
         //Adding click listener to log in button.
         LogInButton.setOnClickListener(new View.OnClickListener() {

@@ -4,6 +4,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.embedded.sad.R;
 
@@ -16,18 +18,23 @@ public class RecyclerViewCustomAdapter extends RecyclerView.Adapter<RecyclerView
          * (custom ViewHolder)
          */
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            private final TextView textView;
+
+            public final View view;
+            public TextView vehicle_num,vehicle_name,owner_name;
 
             public ViewHolder(View view) {
                 super(view);
                 // Define click listener for the ViewHolder's View
+                this.view = view;
+                vehicle_num = (TextView) view.findViewById(R.id.vehicle_num);
 
-                textView = (TextView) view.findViewById(R.id.textView);
+
             }
 
             public TextView getTextView() {
-                return textView;
+                return vehicle_num;
             }
+
         }
 
         /**
@@ -37,10 +44,13 @@ public class RecyclerViewCustomAdapter extends RecyclerView.Adapter<RecyclerView
          * by RecyclerView
          */
         public RecyclerViewCustomAdapter(String[] dataSet) {
+
             localDataSet = dataSet;
+
         }
 
         // Create new views (invoked by the layout manager)
+        @NonNull
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
             // Create a new view, which defines the UI of the list item
@@ -56,7 +66,10 @@ public class RecyclerViewCustomAdapter extends RecyclerView.Adapter<RecyclerView
 
             // Get element from your dataset at this position and replace the
             // contents of the view with that element
+
             viewHolder.getTextView().setText(localDataSet[position]);
+
+
         }
 
         // Return the size of your dataset (invoked by the layout manager)
@@ -64,6 +77,8 @@ public class RecyclerViewCustomAdapter extends RecyclerView.Adapter<RecyclerView
         public int getItemCount() {
             return localDataSet.length;
         }
+
+
     }
 
 

@@ -14,9 +14,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EdgeEffect;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class add_vehicle extends baseActivity {
 
@@ -58,13 +59,14 @@ public class add_vehicle extends baseActivity {
                 String vehicle_nam = vehicle_name.getText().toString();
 
                 prev_vehicle_data = readData("vehicles.txt");
-                String final_vehicle_details = prev_vehicle_data+owner+","+vehicle_number+","+vehicle_nam+";";
+                String final_vehicle_details = prev_vehicle_data+vehicle_number+"   "+owner+"   "+vehicle_nam+";";
 
                 String resp = writeData("vehicles.txt", final_vehicle_details);
 
-                if (resp == "Success"){
+
+                if (resp.equalsIgnoreCase("success")){
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(add_vehicle.this)
-                            .setIcon(R.drawable.ic_launcher_background)
+                            .setIcon(R.drawable.sad_logo)
                             .setTitle("Success")
                             .setMessage("Vehicle Added Successfully." +
                                     "Do you want to Add another Vehicle?")

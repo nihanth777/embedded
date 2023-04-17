@@ -19,15 +19,11 @@ import java.io.IOException;
 
 public class baseActivity extends AppCompatActivity {
 
-    public String wallet_balance;
+    public int port_receive ;
 
-    public String getSomeVariable() {
-        return wallet_balance;
-    }
+    public int port_send ;
 
-    public void setSomeVariable(String balance) {
-        this.wallet_balance = balance;
-    }
+    public String tcp_send_ip = "";
 
     public String readData(String file)
     {
@@ -49,7 +45,7 @@ public class baseActivity extends AppCompatActivity {
         {
             e.printStackTrace();
         }
-        Toast.makeText(this, "reading to file \" + filename + \" completed..", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "reading to file " + file + " completed..", Toast.LENGTH_SHORT).show();
         return data;
     }
 

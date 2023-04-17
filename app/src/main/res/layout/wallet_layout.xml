@@ -59,7 +59,7 @@
                         android:layout_height="wrap_content"
                         android:clickable="true"
                         android:layout_weight="0"
-                        android:text="900"
+                        android:text="9999"
                         android:textAlignment="center"
                         android:textSize="90sp" />
 

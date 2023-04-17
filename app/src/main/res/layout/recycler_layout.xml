@@ -3,12 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:text="TextView">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/vehicle_num"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textColor="@color/emerald_blue"
+            android:padding="15dp"
+            android:text="TextView">
 
-    </TextView>
+        </TextView>
+
 
 </androidx.cardview.widget.CardView>

@@ -1,18 +1,31 @@
 package com.embedded.sad;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.embedded.sad.adapters.RecyclerViewCustomAdapter;
 import com.embedded.sad.base.baseActivity;
+
 import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 public class MainActivity extends baseActivity {
@@ -26,6 +39,12 @@ public class MainActivity extends baseActivity {
     private RelativeLayout card_orders;
 
     private TextView wallet_text,vehicles_text, orders_text, wallet_balance_text;
+
+    MyThread_send myThread_send;
+
+    String prev_order_data = "";
+    String prev_history_data = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +60,13 @@ public class MainActivity extends baseActivity {
         orders_text = findViewById(R.id.text_order);
         wallet_balance_text = findViewById(R.id.wallet_balance);
 
-
-
-
         recyclerView_vehicle = findViewById(R.id.recyclerview_vehicles);
         recyclerView_orders = findViewById(R.id.recyclerview_orders);
+
+
+        SharedPreferences sharedPreferences = this.getSharedPreferences("DATA",Context.MODE_PRIVATE);
+        String balance = sharedPreferences.getString("wallet_balance",null);
+        wallet_balance_text.setText(balance);
 
         populate_vehicle_data();
         populate_orders_data();
@@ -81,6 +102,119 @@ public class MainActivity extends baseActivity {
             }
         });
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        myThread_send = new MyThread_send();
+        new Thread(myThread_send).start();
+
+        Thread myThread_receive = new Thread(new MyThread_receive());
+        myThread_receive.start();
+
+    }
+
+    private class MyThread_send implements Runnable{
+
+        private volatile String msg = "";
+        Socket socket;
+        DataOutputStream dos;
+        @Override
+        public void run() {
+            try {
+
+                socket = new Socket(tcp_send_ip, port_send);
+                dos = new DataOutputStream(socket.getOutputStream());
+                dos.writeUTF(msg);
+                dos.close();
+                dos.flush();
+                socket.close();
+
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+
+        public void sendMsg(String msg){
+            this.msg = msg;
+            run();
+        }
+    }
+
+    private class MyThread_receive implements Runnable{
+        Socket s;
+        ServerSocket ss;
+        InputStreamReader isr;
+        BufferedReader bufferedReader;
+        Handler h = new Handler();
+        String Message;
+
+        @Override
+        public void run() {
+
+            try {
+                ss = new ServerSocket(port_receive);
+                while (true){
+                    s=ss.accept();
+                    isr = new InputStreamReader(s.getInputStream());
+                    bufferedReader = new BufferedReader(isr);
+                    Message = bufferedReader.readLine();
+
+                    h.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if(Message.equalsIgnoreCase("get balance")){
+                                SharedPreferences sharedPreferences = MainActivity.this.getSharedPreferences("DATA",Context.MODE_PRIVATE);
+                                String msg = sharedPreferences.getString("wallet_balance",null);
+                                myThread_send.sendMsg(msg);
+                            } else {
+                                String[] order_msg = Message.split(",");
+
+                                prev_order_data = readData("orders.txt");
+                                String final_order_details = prev_order_data+order_msg[0]+"    "+order_msg[1]+"    £"+order_msg[2]+";";
+                                String resp = writeData("orders.txt", final_order_details);
+
+
+                                Calendar calendar = Calendar.getInstance();
+                                @SuppressLint("SimpleDateFormat") SimpleDateFormat mdFormat = new SimpleDateFormat("HH:mm:ss");
+                                String strTime = mdFormat.format(calendar.getTime());
+
+                                prev_history_data = readData("history.txt");
+                                String final_history_details = prev_history_data+order_msg[0]+"    "+strTime+"    £"+order_msg[2]+";";
+                                String resp1 = writeData("history.txt", final_history_details);
+                                
+                                if(resp.equalsIgnoreCase("success") && resp1.equalsIgnoreCase("success")){
+
+                                    Toast.makeText(MainActivity.this, "Orders and Transaction history are updated succesfully", Toast.LENGTH_SHORT).show();
+                                    
+                                    SharedPreferences sharedPreferences = getSharedPreferences("DATA",Context.MODE_PRIVATE);
+                                    String balance = sharedPreferences.getString("wallet_balance",null);
+                                    String final_balance = String.valueOf(Double.parseDouble(balance) - Double.parseDouble(order_msg[2]));
+                                    sharedPreferences.edit().putString("wallet_balance",final_balance).apply();
+
+                                    finish();
+                                    startActivity(getIntent());
+                                } else if (resp.equalsIgnoreCase("success") && !("success").equalsIgnoreCase(resp1)) {
+
+                                    Toast.makeText(MainActivity.this, "ERROR : Transaction history", Toast.LENGTH_SHORT).show();
+                                    
+                                }else if (resp1.equalsIgnoreCase("success") && !("success").equalsIgnoreCase(resp)) {
+
+                                    Toast.makeText(MainActivity.this, "ERROR : Orders", Toast.LENGTH_SHORT).show();
+
+                                }
+
+                            }
+                            Toast.makeText(MainActivity.this, Message, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
+        }
     }
 
     private void populate_vehicle_data(){
@@ -96,7 +230,7 @@ public class MainActivity extends baseActivity {
             recyclerView_vehicle.setAdapter(recyclerViewCustomAdapter);
         }
         else{
-            String[] vehicle_data_array = data.split(";");
+            String[] vehicle_data_array = data.split(",");
             layoutManagerRecyclerView = new LinearLayoutManager(MainActivity.this);
             recyclerView_vehicle.setLayoutManager(layoutManagerRecyclerView);
             recyclerViewCustomAdapter = new RecyclerViewCustomAdapter(vehicle_data_array);
@@ -118,6 +252,7 @@ public class MainActivity extends baseActivity {
         }
         else{
             String[] orders_data_array = data.split(",");
+
             layoutManagerRecyclerView = new LinearLayoutManager(MainActivity.this);
             recyclerView_orders.setLayoutManager(layoutManagerRecyclerView);
             recyclerViewCustomAdapter = new RecyclerViewCustomAdapter(orders_data_array);
@@ -130,7 +265,7 @@ public class MainActivity extends baseActivity {
     @Override
     public void onBackPressed() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this)
-                .setIcon(R.drawable.ic_launcher_background)
+                .setIcon(R.drawable.sad_logo)
                 .setTitle("Exit")
                 .setMessage("Are you sure to Exit")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
