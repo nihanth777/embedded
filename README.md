@@ -1,4 +1,4 @@
-![Logo](https://github.com/nihanth777/embedded/blob/Masoom/LOGO_c.png?raw=true)
+![Logo](https://github.com/nihanth777/embedded/blob/Masoom/LOGO_1.png?raw=true)
 # Smart-phone based Automatic Dispenser
 ## Problem Statement
 This project looks into the problem of going to the billing desk after refuelling. Many a times the billing desk is qiet far and the weather is not conducive. Hence, this project tries to increase the conveniance of the customer by automating the payment process.
