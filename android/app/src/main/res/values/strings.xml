@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">SAD</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_wallet">Wallet</string>
+    <string name="menu_orders">Orders</string>
+    <string name="menu_vehicles">My Vehicles</string>
+    <string name="menu_offers">Offers</string>
+    <string name="menu_contact">Contact Us</string>
+    <string name="menu_singout">Sign Out</string>
+
+    <string name="contact_us_mail">SAD@gmail.com</string>
+    <string name="contact_us_phone">9876543210</string>
+    <string name="fuel_list">Petrol</string>
+</resources>
