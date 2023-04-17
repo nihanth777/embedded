@@ -286,7 +286,7 @@ public class MainActivity extends baseActivity {
     @Override
     public void onBackPressed() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this)
-                .setIcon(R.drawable.sad_logo)
+                .setIcon(R.drawable.LOGO_1)
                 .setTitle("Exit")
                 .setMessage("Are you sure to Exit")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {

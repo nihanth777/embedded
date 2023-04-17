@@ -13,7 +13,7 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/sad_logo"
+        android:icon="@drawable/LOGO_1"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.SAD"

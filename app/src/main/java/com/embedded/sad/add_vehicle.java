@@ -66,7 +66,7 @@ public class add_vehicle extends baseActivity {
 
                 if (resp.equalsIgnoreCase("success")){
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(add_vehicle.this)
-                            .setIcon(R.drawable.sad_logo)
+                            .setIcon(R.drawable.LOGO_1)
                             .setTitle("Success")
                             .setMessage("Vehicle Added Successfully." +
                                     "Do you want to Add another Vehicle?")
