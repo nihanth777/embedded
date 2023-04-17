@@ -6,7 +6,7 @@ Follow the instructions in the following link to install bcm2853 library \
 Follow the instruction in the following link to connect the wiring of MFRC522 RFID with RPi 1 B+ \
 [https://github.com/GormYa/MFRC522](https://github.com/GormYa/MFRC522 "https://github.com/GormYa/MFRC522")
 
-# Execute the following command to the run the rfidd server
+# Execute the following command to the run the RFID server
 ``` sh
 $ g++ MFRC2835.cpp main.cpp -std=c++11 -lbcm2835 -lpthread
 $ sudo ./a.out
