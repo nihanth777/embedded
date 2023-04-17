@@ -1,9 +1,9 @@
 # Installing libraries for RFID
-Follow the instructions in the following link to install bcm2853 library\n
+Follow the instructions in the following link to install bcm2853 library \
 [https://github.com/luvbum/RPi-RFID](https://github.com/luvbum/RPi-RFID "https://github.com/luvbum/RPi-RFID")
 
 # Setting up the Raspberry pi
-Follow the instruction in the following link to connect the wiring of MFRC522 RFID with RPi 1 B+\n
+Follow the instruction in the following link to connect the wiring of MFRC522 RFID with RPi 1 B+ \
 [https://github.com/GormYa/MFRC522](https://github.com/GormYa/MFRC522 "https://github.com/GormYa/MFRC522")
 
 # Execute the following command to the run the rfidd server
