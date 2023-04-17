@@ -59,7 +59,7 @@ namespace Dispenser_app
         }
         private async void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {   
-            if (!enable) return;
+            if (!enable || balance<=(counter / 100) * 1.45) return;
             //Console.WriteLine("Here");
             if (char.IsWhiteSpace(e.KeyChar))
             {
