@@ -7,7 +7,7 @@ Follow the instruction in the following link to connect the wiring of MFRC522 RF
 [pin connection](https://github.com/GormYa/MFRC522 "https://github.com/GormYa/MFRC522")
 
 # Execute the following command to the run the rfidd server
-''' sh
+``` sh
 $ g++ MFRC2835.cpp main.cpp -std=c++11 -lbcm2835 -lpthread
 $ sudo ./a.out
-'''
+```
