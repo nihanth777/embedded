@@ -1,17 +1,17 @@
-![Logo](https://github.com/nihanth777/embedded/blob/Masoom/LOGO_1.png?raw=true)
+<img src="https://github.com/nihanth777/embedded/blob/Masoom/LOGO_1.png" width="150" height="150">
 
-#Rpi2-RFID
+# Rpi2-RFID
 This folder contains files necessary for reading RFID using Raspberry Pi model 1 b+. 
 The RFID used is MFRC522, which works at 13.56MHz.
 All the necessary instructions can be found in the Readme.md inside the folder.
 
-#Android Application
+# Android Application
 The android application is a prototype and is customisable. 
 The minimum sdk level used for this application is 26 and the compiler sdk is at level 33.
 The language used is Java. 
 The folder contains self contaied project that can be directly accessed using android studio.
 
-#Dispenser Application
+# Dispenser Application
 This windows form application emulates dispenser used in fuelling station.
 This application is written using .NET version 4.7.
 This self contained project can be edited using Visual Studio.
