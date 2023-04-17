@@ -1,19 +1,18 @@
-![Logo](https://github.com/nihanth777/embedded/blob/Masoom/LOGO_c.png?raw=true)
-# Smart-phone based Automatic Dispenser
-## Problem Statement
-This project looks into the problem of going to the billing desk after refuelling. Many a times the billing desk is qiet far and the weather is not conducive. Hence, this project tries to increase the conveniance of the customer by automating the payment process.
+<img src="https://github.com/nihanth777/embedded/blob/Masoom/LOGO_1.png" width="150" height="150">
 
-## Proposed Solution-
-We propose a RFID based automated re-fuelling solution, which identifies the vehicle and user account uniquely using RFID tag and bills the associated user account.
+# Rpi2-RFID
+* This folder contains files necessary for reading RFID using Raspberry Pi model 1 b+. 
+* The RFID used is MFRC522, which works at 13.56MHz.
+* All the necessary instructions can be found in the Readme.md inside the folder.
 
-## Steps to the proposed solution-
-1. Identifying the vehicle using RFID
-2. Communicating this information with main controller
-3. Main controller communicates with the cloud
-4. user receives notification on smart-phone on app and approves it.
-5. main controller receives cost information from the dispenser
-6. Main controller performs the transaction.
+# Android Application
+* The android application is a prototype and is customisable. 
+* The minimum sdk level used for this application is 26 and the compiler sdk is at level 33.
+* The language used is Java. 
+* The folder contains self contaied project that can be directly accessed using android studio.
 
-## Social Media Handles
-1. [Instagram](https://instagram.com/s_a_d__1.0?igshid=NjNlMDhmYTc= "Instagram")
-2. [Facebook](https://www.facebook.com/profile.php?id=100091448425835&mibextid=ZbWKwL "Facebook")
+# Dispenser Application
+* This windows form application emulates dispenser used in fuelling station.
+* This application is written using .NET version 4.7.
+* This self contained project can be edited using Visual Studio.
+* The exe file is stored in Dispencer/Dispenser_app/bin/release
