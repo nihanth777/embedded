@@ -1,0 +1,11 @@
+C:\Users\bigze\source\repos\Dispenser_app\Dispenser_app\obj\Debug\Dispenser_app.csproj.AssemblyReference.cache
+C:\Users\bigze\source\repos\Dispenser_app\Dispenser_app\obj\Debug\Dispenser_app.csproj.SuggestedBindingRedirects.cache
+C:\Users\bigze\source\repos\Dispenser_app\Dispenser_app\obj\Debug\Dispenser_app.Form1.resources
+C:\Users\bigze\source\repos\Dispenser_app\Dispenser_app\obj\Debug\Dispenser_app.Properties.Resources.resources
+C:\Users\bigze\source\repos\Dispenser_app\Dispenser_app\obj\Debug\Dispenser_app.csproj.GenerateResource.cache
+C:\Users\bigze\source\repos\Dispenser_app\Dispenser_app\obj\Debug\Dispenser_app.csproj.CoreCompileInputs.cache
+C:\Users\bigze\source\repos\Dispenser_app\Dispenser_app\bin\Debug\Dispenser_app.exe.config
+C:\Users\bigze\source\repos\Dispenser_app\Dispenser_app\bin\Debug\Dispenser_app.exe
+C:\Users\bigze\source\repos\Dispenser_app\Dispenser_app\bin\Debug\Dispenser_app.pdb
+C:\Users\bigze\source\repos\Dispenser_app\Dispenser_app\obj\Debug\Dispenser_app.exe
+C:\Users\bigze\source\repos\Dispenser_app\Dispenser_app\obj\Debug\Dispenser_app.pdb
